@@ -277,11 +277,15 @@ export const parseColorWithoutRounding = (colorString: string): Result => {
           pathStart += parseResult[pathStart + relMap['rgbNumber|commas']]
             ? relMap['rgbNumber|commas']
             : relMap['rgbNumber|spaces']
-          r = floatToRange255(parseResult[pathStart + relMap['rgbNumber.red']])
-          g = floatToRange255(
-            parseResult[pathStart + relMap['rgbNumber.green']]
+          r = floatToRange255(
+            parseFloat(parseResult[pathStart + relMap['rgbNumber.red']])
           )
-          b = floatToRange255(parseResult[pathStart + relMap['rgbNumber.blue']])
+          g = floatToRange255(
+            parseFloat(parseResult[pathStart + relMap['rgbNumber.green']])
+          )
+          b = floatToRange255(
+            parseFloat(parseResult[pathStart + relMap['rgbNumber.blue']])
+          )
         }
 
         const alpha = parseAlphaValue(pathStart + relMap['rgbNumber.alpha'])
@@ -447,24 +451,23 @@ export const parseColorWithoutRounding = (colorString: string): Result => {
 
 export const percentageToRange255 = (percentage: string): number => {
   const unclamped = (Number(percentage.slice(0, -1)) * 255) / 100
-  return unclamped < 0 ? 0 : unclamped > 255 ? 255 : unclamped
+  return unclamped <= 0 ? 0 : unclamped >= 255 ? 255 : unclamped
 }
 
 export const percentageToNumber = (percentage: string): number => {
   const unclamped = Number(percentage.slice(0, -1))
-  return unclamped < 0 ? 0 : unclamped > 100 ? 100 : unclamped
+  return unclamped <= 0 ? 0 : unclamped >= 100 ? 100 : unclamped
 }
 
 export const percentageToDecimal = (percentage: string): number => {
   const unclamped = Number(percentage.slice(0, -1)) * 0.01
-  return unclamped < 0 ? 0 : unclamped > 1 ? 1 : unclamped
+  return unclamped <= 0 ? 0 : unclamped >= 1 ? 1 : unclamped
 }
 
-export const floatToRange255 = (float: string): number => {
-  const unclamped = parseFloat(float)
-  return unclamped < 0 ? 0 : unclamped > 255 ? 255 : unclamped
+export const floatToRange255 = (float: number): number => {
+  return float <= 0 ? 0 : float >= 255 ? 255 : float
 }
 
 export const decimalClamp = (float: number): number => {
-  return float < 0 ? 0 : float > 1 ? 1 : float
+  return float <= 0 ? 0 : float >= 1 ? 1 : float
 }

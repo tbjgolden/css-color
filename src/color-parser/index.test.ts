@@ -1,4 +1,11 @@
-import { parseColor } from '.'
+import {
+  parseColor,
+  percentageToRange255,
+  percentageToNumber,
+  percentageToDecimal,
+  floatToRange255,
+  decimalClamp
+} from '.'
 
 describe('hex', () => {
   test('6-digit hex', () => {
@@ -930,6 +937,13 @@ describe('utility-functions', () => {
     expect(percentageToDecimal('100%')).toBe(1)
     expect(percentageToDecimal('150%')).toBe(1)
   })
+  test('floatToRange255', () => {
+    expect(floatToRange255(-1)).toBe(0)
+    expect(floatToRange255(0)).toBe(0)
+    expect(floatToRange255(1)).toBe(1)
+    expect(floatToRange255(255)).toBe(255)
+    expect(floatToRange255(256)).toBe(255)
+  })
   test('decimalClamp', () => {
     expect(decimalClamp(-0.5)).toBe(0)
     expect(decimalClamp(-0)).toBe(0)
@@ -939,22 +953,3 @@ describe('utility-functions', () => {
     expect(decimalClamp(1.5)).toBe(1)
   })
 })
-
-export const percentageToRange255 = (percentage: string): number => {
-  const unclamped = (Number(percentage.slice(0, -1)) * 255) / 100
-  return unclamped <= 0 ? 0 : unclamped >= 255 ? 255 : unclamped
-}
-
-export const percentageToNumber = (percentage: string): number => {
-  const unclamped = Number(percentage.slice(0, -1))
-  return unclamped <= 0 ? 0 : unclamped >= 100 ? 100 : unclamped
-}
-
-export const percentageToDecimal = (percentage: string): number => {
-  const unclamped = Number(percentage.slice(0, -1)) * 0.01
-  return unclamped <= 0 ? 0 : unclamped >= 1 ? 1 : unclamped
-}
-
-export const decimalClamp = (float: number): number => {
-  return float <= 0 ? 0 : float >= 1 ? 1 : float
-}
