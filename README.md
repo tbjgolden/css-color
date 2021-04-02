@@ -31,7 +31,19 @@ Key points:
 The parser function is the default export:
 
 ```js
-const parseColor = require('css-color')
+const { parseColor } = require('css-color-l4')
+
+const color = parseColor('hsl(3051e-2, 80%, 35%)')
+
+/*
+color = {
+  type: 'hsl',
+  h: 31,
+  s: 80,
+  l: 35,
+  alpha: 1
+}
+*/
 ```
 
 ## Installation
@@ -43,11 +55,7 @@ npm install css-color-l4 --save
 
 Alternatively, there are also client web builds available:
 
-<!-- IMPORTANT: Do not delete or change the comments in the code block below -->
-
 ```html
-<!-- Dependencies -->
-
 <!-- window.CSSColor -->
 <script src="https://unpkg.com/css-color-l4/dist/css-color-l4.umd.js"></script>
 ```
