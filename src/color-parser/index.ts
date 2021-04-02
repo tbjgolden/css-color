@@ -401,7 +401,8 @@ export const parseColorWithoutRounding = (colorString: string): Result => {
         }
       }
 
-      case 'device-cmyk': {
+      default: {
+        // case 'device-cmyk': {
         let innerParseResult = deviceCmykParser.fastRegex.exec(str)
         if (innerParseResult === null)
           innerParseResult = deviceCmykParser.regex.exec(str)

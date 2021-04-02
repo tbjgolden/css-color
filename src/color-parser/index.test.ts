@@ -701,8 +701,20 @@ describe('hwb', () => {
 })
 
 describe('lab', () => {
-  test('lab() with no alpha', () => {
-    expect(parseColor('lab(50% 35 -20)')).toEqual({
+  test('lab() with random stuff inside', () => {
+    expect(parseColor('lab(...)')).toBe(null)
+  })
+  test('lab() with fast regex', () => {
+    expect(parseColor('lab(0% 0 0)')).toEqual({
+      type: 'lab',
+      l: 0,
+      a: 0,
+      b: 0,
+      alpha: 1
+    })
+  })
+  test('lab() with no alpha and decimals', () => {
+    expect(parseColor('lab(50.0% 35.0 -20.0)')).toEqual({
       type: 'lab',
       l: 50,
       a: 35,
@@ -755,6 +767,9 @@ describe('lab', () => {
 })
 
 describe('lch', () => {
+  test('lch() with random stuff inside', () => {
+    expect(parseColor('lch(...)')).toBe(null)
+  })
   test('lch() with no hue unit', () => {
     expect(parseColor('lch(50% 35 20)')).toEqual({
       type: 'lch',
@@ -850,6 +865,9 @@ describe('lch', () => {
 })
 
 describe('device-cmyk', () => {
+  test('device-cmyk() with random stuff inside', () => {
+    expect(parseColor('device-cmyk(...)')).toBe(null)
+  })
   test('device-cmyk() with percentages', () => {
     expect(parseColor('device-cmyk(70% 30% 25% 20%)')).toEqual({
       type: 'device-cmyk',
