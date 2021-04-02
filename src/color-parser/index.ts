@@ -79,6 +79,47 @@ export type Result =
   | null
 
 export const parseColor = (colorString: string): Result => {
+  const unroundedResult = parseColorWithoutRounding(colorString)
+  if (unroundedResult === null) {
+    return null
+  } else {
+    let ref: Result = unroundedResult
+    while (ref && ref.type === 'device-cmyk') {
+      ref.c = Math.round(ref.c)
+      ref.m = Math.round(ref.m)
+      ref.y = Math.round(ref.y)
+      ref.k = Math.round(ref.k)
+      ref = ref.fallback
+    }
+    if (ref !== null) {
+      if (ref.type === 'hex' || ref.type === 'rgb' || ref.type === 'keyword') {
+        ref.r = Math.round(ref.r)
+        ref.g = Math.round(ref.g)
+        ref.b = Math.round(ref.b)
+      } else if (ref.type === 'hsl') {
+        ref.h = Math.round(ref.h)
+        ref.s = Math.round(ref.s)
+        ref.l = Math.round(ref.l)
+      } else if (ref.type === 'hwb') {
+        ref.h = Math.round(ref.h)
+        ref.w = Math.round(ref.w)
+        ref.b = Math.round(ref.b)
+      } else if (ref.type === 'lch') {
+        ref.l = Math.round(ref.l)
+        ref.c = Math.round(ref.c)
+        ref.h = Math.round(ref.h)
+      } else if (ref.type === 'lab') {
+        ref.l = Math.round(ref.l)
+        ref.a = Math.round(ref.a)
+        ref.b = Math.round(ref.b)
+      }
+      ref.alpha = parseFloat(ref.alpha.toFixed(2))
+    }
+    return unroundedResult
+  }
+}
+
+export const parseColorWithoutRounding = (colorString: string): Result => {
   const str = colorString.trim()
 
   // Hex
