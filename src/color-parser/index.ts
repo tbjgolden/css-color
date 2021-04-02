@@ -108,7 +108,8 @@ export const parseColor = (colorString: string): Result => {
         ref.l = Math.round(ref.l)
         ref.c = Math.round(ref.c)
         ref.h = Math.round(ref.h)
-      } else if (ref.type === 'lab') {
+      } else {
+        // if (ref.type === 'lab') {
         ref.l = Math.round(ref.l)
         ref.a = Math.round(ref.a)
         ref.b = Math.round(ref.b)
@@ -182,30 +183,6 @@ export const parseColorWithoutRounding = (colorString: string): Result => {
       b,
       alpha: alpha / 255
     }
-  }
-
-  const percentageToRange255 = (percentage: string): number => {
-    const unclamped = (Number(percentage.slice(0, -1)) * 255) / 100
-    return unclamped < 0 ? 0 : unclamped > 255 ? 255 : unclamped
-  }
-
-  const percentageToNumber = (percentage: string): number => {
-    const unclamped = Number(percentage.slice(0, -1))
-    return unclamped < 0 ? 0 : unclamped > 100 ? 100 : unclamped
-  }
-
-  const percentageToDecimal = (percentage: string): number => {
-    const unclamped = Number(percentage.slice(0, -1)) * 0.01
-    return unclamped < 0 ? 0 : unclamped > 1 ? 1 : unclamped
-  }
-
-  const floatToRange255 = (float: string): number => {
-    const unclamped = parseFloat(float)
-    return unclamped < 0 ? 0 : unclamped > 255 ? 255 : unclamped
-  }
-
-  const decimalClamp = (float: number): number => {
-    return float < 0 ? 0 : float > 1 ? 1 : float
   }
 
   let parseResult: RegExpExecArray
@@ -294,7 +271,8 @@ export const parseColorWithoutRounding = (colorString: string): Result => {
           b = percentageToRange255(
             parseResult[pathStart + relMap['rgbPercentage.blue']]
           )
-        } else if (parseResult[relMap['rgb.rgbNumber']]) {
+        } else {
+          // if (parseResult[relMap['rgb.rgbNumber']]) {
           pathStart = relMap['rgb.rgbNumber']
           pathStart += parseResult[pathStart + relMap['rgbNumber|commas']]
             ? relMap['rgbNumber|commas']
@@ -304,8 +282,6 @@ export const parseColorWithoutRounding = (colorString: string): Result => {
             parseResult[pathStart + relMap['rgbNumber.green']]
           )
           b = floatToRange255(parseResult[pathStart + relMap['rgbNumber.blue']])
-        } else {
-          return null
         }
 
         const alpha = parseAlphaValue(pathStart + relMap['rgbNumber.alpha'])
@@ -467,4 +443,28 @@ export const parseColorWithoutRounding = (colorString: string): Result => {
   }
 
   return null
+}
+
+export const percentageToRange255 = (percentage: string): number => {
+  const unclamped = (Number(percentage.slice(0, -1)) * 255) / 100
+  return unclamped < 0 ? 0 : unclamped > 255 ? 255 : unclamped
+}
+
+export const percentageToNumber = (percentage: string): number => {
+  const unclamped = Number(percentage.slice(0, -1))
+  return unclamped < 0 ? 0 : unclamped > 100 ? 100 : unclamped
+}
+
+export const percentageToDecimal = (percentage: string): number => {
+  const unclamped = Number(percentage.slice(0, -1)) * 0.01
+  return unclamped < 0 ? 0 : unclamped > 1 ? 1 : unclamped
+}
+
+export const floatToRange255 = (float: string): number => {
+  const unclamped = parseFloat(float)
+  return unclamped < 0 ? 0 : unclamped > 255 ? 255 : unclamped
+}
+
+export const decimalClamp = (float: number): number => {
+  return float < 0 ? 0 : float > 1 ? 1 : float
 }

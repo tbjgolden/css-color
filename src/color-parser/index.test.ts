@@ -615,6 +615,10 @@ describe('hsl', () => {
 })
 
 describe('hwb', () => {
+  test('hwb() with invalid contents', () => {
+    expect(parseColor('hwb(.., .., ..)')).toBe(null)
+  })
+
   const variants = [
     ['with alpha', 'no alpha'],
     ['', 'deg', 'grad', 'rad', 'turn']
@@ -903,3 +907,54 @@ describe('device-cmyk', () => {
     })
   })
 })
+
+describe('utility-functions', () => {
+  test('percentageToRange255', () => {
+    expect(percentageToRange255('-100%')).toBe(0)
+    expect(percentageToRange255('0%')).toBe(0)
+    expect(percentageToRange255('20%')).toBe(51)
+    expect(percentageToRange255('100%')).toBe(255)
+    expect(percentageToRange255('150%')).toBe(255)
+  })
+  test('percentageToNumber', () => {
+    expect(percentageToNumber('-100%')).toBe(0)
+    expect(percentageToNumber('0%')).toBe(0)
+    expect(percentageToNumber('50%')).toBe(50)
+    expect(percentageToNumber('100%')).toBe(100)
+    expect(percentageToNumber('150%')).toBe(100)
+  })
+  test('percentageToDecimal', () => {
+    expect(percentageToDecimal('-100%')).toBe(0)
+    expect(percentageToDecimal('0%')).toBe(0)
+    expect(percentageToDecimal('50%')).toBe(0.5)
+    expect(percentageToDecimal('100%')).toBe(1)
+    expect(percentageToDecimal('150%')).toBe(1)
+  })
+  test('decimalClamp', () => {
+    expect(decimalClamp(-0.5)).toBe(0)
+    expect(decimalClamp(-0)).toBe(0)
+    expect(decimalClamp(0)).toBe(0)
+    expect(decimalClamp(0.5)).toBe(0.5)
+    expect(decimalClamp(1)).toBe(1)
+    expect(decimalClamp(1.5)).toBe(1)
+  })
+})
+
+export const percentageToRange255 = (percentage: string): number => {
+  const unclamped = (Number(percentage.slice(0, -1)) * 255) / 100
+  return unclamped <= 0 ? 0 : unclamped >= 255 ? 255 : unclamped
+}
+
+export const percentageToNumber = (percentage: string): number => {
+  const unclamped = Number(percentage.slice(0, -1))
+  return unclamped <= 0 ? 0 : unclamped >= 100 ? 100 : unclamped
+}
+
+export const percentageToDecimal = (percentage: string): number => {
+  const unclamped = Number(percentage.slice(0, -1)) * 0.01
+  return unclamped <= 0 ? 0 : unclamped >= 1 ? 1 : unclamped
+}
+
+export const decimalClamp = (float: number): number => {
+  return float <= 0 ? 0 : float >= 1 ? 1 : float
+}
