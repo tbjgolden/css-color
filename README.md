@@ -28,8 +28,6 @@ Key points:
 
 ## Usage
 
-The parser function is the default export:
-
 ```js
 const { parseColor } = require('css-color-l4')
 
