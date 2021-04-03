@@ -6,23 +6,30 @@
 
 > **CSS Color Module Level 4\-compliant color string parser**
 
-(forked from adroitwhiz/css-color and translated to TypeScript)
-
 `css-color-l4` is a CSS Color Module Level 4-compliant CSS color value parser.
+
 It parses any color values defined in the CSS Color Module Level 4, and refuses
 to parse any other values. This is to ensure complete consistency with, for
-instance, web browsers. In comparison, most other JS color parsers both fail to
-parse color values that browsers will accept.
+instance, web browsers. _In comparison, most other JS color parsers both fail to
+parse color values that browsers will accept._
 
-Key points:
+Used by:
 
-- this library is well tested around edge cases
-- this library doesn't include any color conversion functionality
+- [colornorm](https://github.com/tbjgolden/colornorm) | Normalize CSS colors in
+  a spec compliant way
+
+Other key points:
+
+- handles all the edge cases from the spec
+- 100% test coverage, including those edge cases
+- is written in TypeScript and includes types
+- this library doesn't include any color conversion functionality, but exports
+  colors in an ideal way for libraries such as
+  [color-convert](https://github.com/Qix-/color-convert)
 
 ## Limitations
 
 - The `color()` function syntax is currently not supported.
-- `currentcolor` is currently not supported.
 - System colors (i.e. like `VisitedText`) are currently not supported. (Named
   colors like `red` are supported)
 
